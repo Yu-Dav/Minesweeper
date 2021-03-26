@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MineSweeper</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+</head>
+
+<body onload="init(4)">
+  <h1 class="header">- - - - Mine Sweeper - - - -</h1>
+  <div class="game-container" id="noContextMenu">
+    <div class="top-bar container">
+      <div class="mid-section">
+        <div class="lever-selector">
+          <button onclick="changeLevel(4)">4x4</button>
+          <button onclick="changeLevel(8)">8x8</button>
+          <button onclick="changeLevel(12)">12x12</button>
+        </div>
+        <div class="mark-manually-container" onclick="markCellManually(this)"> <span>🚩</span> </div>
+      </div>
+      <div class="score-container">Mines left:&#160;</br><span></span></div>
+      <div class="timer-container">Timer: &#160;</br><span>0</span></div>
+    </div>
+
+    <div class="board">
+      <div class="board-container"></div>
+    </div>
+    <div class="status-icon-container" onclick="init()"><img src="img/start.png"></div>
+
+    <div class="extras">
+      <div class="best-time-container"> <span class="best-time-header">Best times: <span></span></br>
+          Easy: <span class="easy" id="l4">0</span></br>
+          Medium: <span class="medium" id="l8">0</span></br>
+          Hard: <span class="hard" id="l12">0</span></br>
+      </div>
+      <div class="lives-container"> Lives left:&#160;</br><span></span></div>
+      <div class="hint-container"></br>
+        <div class="hint hint-one" onclick="useHint(this)"><img src="img/lamp.png"></div>
+        <div class="hint hint-two" onclick="useHint(this)"><img src="img/lamp.png"></div>
+        <div class="hint hint-three" onclick="useHint(this)"><img src="img/lamp.png"></div>
+      </div>
+    </div>
+
+  </div>
+  <audio src="aud/pop.wav" class="audio"></audio>
+  <audio src="aud/victory.wav" class="victory-aud"></audio>
+
+  <script src="js/utils.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/more.js"></script>
+</body>
+
+</html>

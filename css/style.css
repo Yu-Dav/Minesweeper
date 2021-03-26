@@ -1,0 +1,258 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    background-image: url("../img/background.png");
+    background-size: cover;
+
+}
+
+.header {
+    height: 1.5em;
+    width: auto;
+    font-size: 2em;
+    letter-spacing: 4px;
+    word-spacing: -0.5px;
+    text-align: center;
+}
+
+.game-container {
+    height: 1000px;
+    width: 600px;
+    margin: auto;
+}
+
+.top-bar-container {
+    display: flex;
+}
+
+.top-bar-container>div {
+    flex: 1;
+}
+
+.lever-selector {
+    height: 10px;
+    width: 200px;
+    margin: auto;
+}
+
+.lever-selector button {
+    font-size: 16px;
+    height: 30px;
+    width: 60px;
+    padding: 5px;
+    border: none;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgba(255, 255, 255, 0.26);
+    border-radius: 5px;
+    border: 1px solid white;
+}
+/* 
+.mid-section {
+    margin-top: 20px;
+} */
+
+.lever-selector button:hover {
+    border: 1px solid rgb(90, 19, 119);
+
+}
+
+.lever-selector button:focus {
+    outline: none;
+}
+
+.mark-manually-container {
+    height: 10px;
+    width: 10px;
+    margin: auto;
+    padding-top: 40px;
+}
+
+.flag-clicked span {
+    box-shadow: 1px 1px 5px 5px rgb(255, 255, 255);
+    border-radius: 50%;
+}
+
+.score-container {
+    height: 3em;
+    width: 9em;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.26);
+    float: left;
+    border-radius: 5px;
+    border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timer-container {
+    height: 3em;
+    width: 7em;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.26);
+    float: right;
+    border-radius: 5px;
+    border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.score-container span {
+    color: rgb(255, 255, 255);
+    font-size: 1.2em;
+    font-weight: bolder;
+    letter-spacing: 2.5px;
+}
+
+.timer-container span {
+    color: rgb(255, 255, 255);
+    font-size: 1.2em;
+    font-weight: bolder;
+    letter-spacing: 2.5px;
+
+}
+
+.board {
+    margin-top: 100px;
+}
+
+table {
+    font-size: 22px;
+    font-weight: bold;
+    margin: auto;
+    table-layout: fixed;
+}
+
+table,
+tr,
+td {
+    background-color: rgba(236, 236, 236, 0);
+}
+
+table,
+td {
+    height: 30px;
+    width: 30px;
+}
+
+table :hover {
+    background-color: rgb(136, 111, 177);
+}
+
+td {
+    padding: 3px;
+    height: 30px;
+    width: 30px;
+    background-color: rgb(216, 214, 214);
+    /* background-color: rgba(216, 214, 214, 0.345); */
+    /* collides with 116 */
+}
+
+td span .zero {
+    background-color: rgb(245, 243, 243);
+}
+
+td :not(.clicked) {
+    background-color: rgb(172, 172, 172);
+}
+
+td .clicked {
+    visibility: hidden;
+}
+
+.status-icon-container {
+    height: 100px;
+    width: 600px;
+    margin: auto;
+    /* word-wrap: break-word */
+}
+
+
+.status-icon-container img {
+    display: block;
+    height: 80px;
+    width: 80px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.extras {
+    display: flex;
+
+}
+
+.lives-container {
+    height: 70px;
+    width: 100px;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.26);
+    margin: auto;
+    margin-top: 50px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid white;
+
+}
+
+.lives-container span {
+    color: rgb(255, 255, 255);
+    font-size: 1.2em;
+    font-weight: bolder;
+    letter-spacing: 2.5px;
+}
+
+.best-time-container {
+    height: 100px;
+    width: 150px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.26);
+    margin: auto;
+    margin-top: 50px;
+    text-align: left;
+    border-radius: 5px;
+    border: 1px solid white;
+    float: left;
+}
+
+.best-time-container span {
+    color: rgb(0, 0, 0);
+    font-size: 18px;
+    letter-spacing: 1px;
+    line-height: 135%;
+}
+
+.hint-container {
+    height: 60px;
+    width: 240px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.26);
+    margin: auto;
+    margin-top: 50px;
+    text-align: left;
+    border-radius: 5px;
+    border: 1px solid white;
+    float: left;
+}
+
+.hint-container {
+    display: flex;
+}
+
+.hint-container span {
+    color: rgb(0, 0, 0);
+    font-size: 18px;
+    letter-spacing: 1px;
+    line-height: 135%;
+}
+
+.hint img {
+    height: 50px;
+    width: 80px;
+}
+
+.hint-clicked {
+    /* border: solid 1px #555; */
+    box-shadow: 1px 1px 15px 1.5px rgb(255, 255, 255);
+    border-radius: 50%;
+}
