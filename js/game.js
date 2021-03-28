@@ -197,7 +197,6 @@ function gameOver() {
     renderImg('sad');
     clearInterval(gInterval);
     gIsTimerOn = false;
-    checkHighScore();
 }
 
 
