@@ -36,7 +36,7 @@ function renderBoard(board) {
 
 function renderCell(location, value) {
     // is the cell's mine count is 0 -> render with empty content
-    // if (gBoard[location.i][location.j].minesAroundCount === 0 && !gBoard[location.i][location.j].isMine ) value = `<span>${EMPTY}</span>`;
+    // if (gBoard[location.i][location.j].minesAroundCount === 0 && (!gBoard[location.i][location.j].isMine || gBoard[location.i][location.j].isMine)) value = `<span></span>`;
     var elCellX = document.querySelector(`.cell${location.i}_${location.j}`)
     elCellX.innerHTML = value;
 }
@@ -45,15 +45,18 @@ function renderScore(dif) {
     var elScoreBox = document.querySelector('.score-container span')
     elScoreBox.innerText = dif
 }
+
 function renderImg(sit) {
     var elStatusBar = document.querySelector('.status-icon-container');
     var strHTML = `<div class="status-icon-container" onclick="init()"><img src="img/${sit}.png"></div>`;
     switch (sit) {
         case 'win':
-            strHTML += ('Victory!! Click to celebrate and play again!');
+            strHTML += ('<div class="text-box">Victory! play again?</div>');
+            // strHTML += ('Victory!! Click to celebrate and play again!');
             break;
         case 'sad':
-            strHTML += ('</br>Oh no! Click above to make the sad guy happy and play again');
+            strHTML += ('<div class="text-box">Play again</div>');
+            // strHTML += ('<div class="text-box">Oh no! Click above to make the sad guy happy and play again</div>');
             break;
         case 'start':
             strHTML += ('</br>Enjoy!');
@@ -78,6 +81,7 @@ function runTimer() {
         millis = millis / 1000;
         millis = millis.toFixed(0);
         elTimerBox.innerText = millis;
+        gGame.secsPassed++;
     }, 1000);
 }
 
@@ -137,7 +141,7 @@ function updateLives() {
     var elSpan = document.querySelector('.lives-container span');
     if (gGame.lives === 3) elSpan.innerHTML = ('1 2 <u>3</u>');
     if (gGame.lives === 2) elSpan.innerHTML = ('1 <u>2</u> <s>3<s/>');
-    if (gGame.lives === 1) elSpan.innerHTML = ('<u>1<u/> <del>2 3</del>');
+    if (gGame.lives === 1) elSpan.innerHTML = ('<u>1</u> <del>2 3</del>');
     if (!gGame.lives) {
         elSpan.innerHTML = ('💩');
         gameOver();

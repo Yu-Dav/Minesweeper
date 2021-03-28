@@ -40,7 +40,7 @@ function revealCell(rowIdx, colIdx) {
             }
         }
     }
-    setTimeout(function () { hideCells(rowIdx, colIdx); }, 2500);
+    setTimeout(function () { hideCells(rowIdx, colIdx); }, 1000);
 }
 
 function hideCells(rowIdx, colIdx) {
@@ -51,8 +51,8 @@ function hideCells(rowIdx, colIdx) {
             if (!gBoard[i][j].isShown) {
                 var pos = getPos(i, j)
                 var strHTML = `<span></span>`
+                if (gBoard[i][j].isMarked) strHTML = `<span>${FLAG}</span>`;
                 renderCell(pos, strHTML);
-                //// <-----> Hidding marked cells - need to fix!
             }
         }
     }
@@ -60,12 +60,10 @@ function hideCells(rowIdx, colIdx) {
 
 function markCellManually(elFlag) {
     if (gGame.isMarkManually) {
-        // console.log ('activte yet disabled')
         removeFlagAura();
         return
     }
     gGame.isMarkManually = true;
-    console.log('mark manually =')
     elFlag.classList.add('flag-clicked');
 }
 
@@ -78,43 +76,67 @@ function removeFlagAura() {
 
 
 function useHint(elHintIcon) {
-    if (!gGame.shownCount) return;
+    if (!gGame.isOn) return;
+    if (!gGame.shownCount) { /// not possible on first click
+        hintUsedOnFirstClick();
+        return;
+    }
     if (gHintCounter > 2) return;
     gGame.isHintUsed = true;
-    console.log('gHintCounter  =', gHintCounter)
     gHintCounter++;
     elHintIcon.classList.add('hint-clicked');
-    // add text below
+}
+
+function hintUsedOnFirstClick() {
+    var elStatusBar = document.querySelector('.status-icon-container');
+    console.log('elStatusBar =', elStatusBar)
+    var strHTML = `<div class="status-icon-container" onclick="init()"><img src="img/start.png">Not one the first click</div>`;
+    elStatusBar.innerHTML = strHTML;
+
+}
+
+function removeHintAura() {
+    var hints = document.querySelectorAll('.hint');
+    for (var i = 0; i < hints.length; i++) {
+        var currHint = hints[i];
+        currHint.classList.remove('hint-clicked');
+    }
+
 }
 
 function checkHighScore() {
-    var elTimerBox = document.querySelector('.timer-container span');
-    var timeTaken = elTimerBox.innerHTML;
-    var level = gLevel.size;
-    // var level = gLevel.size + '';
-    console.log('level =', level)
-    if (!sessionStorage) {
-        sessionStorage.setItem(level, timeTaken)
+    var levelPlayed = gLevel.size;
+    var CurrMatchTime = gGame.secsPassed;
+    if (!sessionStorage.getItem(levelPlayed)) {
+        sessionStorage.setItem(levelPlayed, CurrMatchTime);
+        renderHighScore(levelPlayed, CurrMatchTime);
+        return;
+
     } else {
-        var currHighTime = sessionStorage.getItem("12");
-        console.log(currHighTime)
-        if (timeTaken > currHighTime) {
-            // sessionStorage.removeItem("12")
-            /// remove the current high time
-            // add the new high time
+        var currBestTime = sessionStorage.getItem(levelPlayed);
+        if (CurrMatchTime < currBestTime) {
+            updateHighScore(levelPlayed, CurrMatchTime);
+            // return;
         }
     }
-    var score = {
-        level: level,
-        time: timeTaken
-    }
-    renderHighScore(score)
 }
 
-function renderHighScore(score) {
-    var level = score.level;
-    var timeTaken = score.time;
-    var elBestTimeSlot = document.querySelector(`#l${level}`);
-    elBestTimeSlot.innerHTML = timeTaken;
+function updateHighScore(level, score) {
+    sessionStorage.removeItem(level);
+    sessionStorage.setItem(level, score)
+    renderHighScore(level, score);
+}
+
+function renderHighScore(level, score = sessionStorage.getItem(level)) {
+    var elBestTimeBox = document.querySelector(`#l${level}`);
+    elBestTimeBox.innerHTML = score;
+}
+
+function renderHighScores() {
+    var elBestTimeBoxes = document.querySelectorAll('.level')
+    for (var i = 0; i < elBestTimeBoxes.length; i++) {
+        var elCurrBestTimeBoxSpan = elBestTimeBoxes[i];
+        // console.log('elCurrBestTimeBoxSpan =', elCurrBestTimeBoxSpan)
+    }
 
 }

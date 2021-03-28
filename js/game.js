@@ -21,13 +21,17 @@ function init(level = gLevel.size) {
         markedCount: 0,
         lives: 3,
         isHintUsed: false,
-        isMarkManually: false
-        // secsPassed: 0
+        isMarkManually: false,
+        secsPassed: 0
     }
     gMinesPlaced = false;
     renderImg('start');
     updateScore();
     updateLives();
+    gHintCounter = 0;
+    removeHintAura()
+    renderHighScore(gLevel.size);
+    // renderHighScores();
     var elTimerBox = document.querySelector('.timer-container span');
     elTimerBox.innerText = '';
     clearInterval(gInterval);
@@ -60,23 +64,25 @@ function placeMines(posI, posJ) {
 }
 
 function setMinesNegsCount(board, pos) {
-    var minesAroundCount = 0;
+    var minesCount = 0;
     for (var i = pos.i - 1; i <= pos.i + 1; i++) {
-        if (i < 0 || i >= board.length) continue
+        if (i < 0 || i >= board.length) continue;
         for (var j = pos.j - 1; j <= pos.j + 1; j++) {
-            if (j < 0 || j >= board[0].length) continue
-            if (i === pos.i && j === pos.j) continue
+            if (j < 0 || j >= board[0].length) continue;
+            if (i === pos.i && j === pos.j) continue;
             if (board[i][j].isMine) {
-                minesAroundCount++;
-                board[pos.i][pos.j].minesAroundCount = minesAroundCount;
+                minesCount++;
+                board[pos.i][pos.j].minesAroundCount = minesCount;
             }
         }
     }
-    var strHTML = `<span class="clicked">${gBoard[pos.i][pos.j].minesAroundCount}</span>`
-    renderCell(pos, strHTML)
+    var strHTML = `<span class="clicked">${gBoard[pos.i][pos.j].minesAroundCount}</span>`;
+    renderCell(pos, strHTML);
 }
 
 function cellClicked(ev, elCell, i, j) {
+    var pos = getPos(i, j);
+    var cell = gBoard[i][j];
 
     if (!gGame.isOn) return;
     if (!gGame.shownCount) { // running on first click only
@@ -88,49 +94,54 @@ function cellClicked(ev, elCell, i, j) {
         revealCell(i, j);
         return;
     }
-    var pos = getPos(i, j);
-    if (ev.button === 2 && !gBoard[pos.i][pos.j].isShown || gGame.isMarkManually) { // on right click
-        cellMarked(pos, elCell);
+    if ((ev.button === 2 || gGame.isMarkManually) && (!cell.isShown || cell.isMine)) { // on right click
+        markCell(pos, elCell);
         return;
     }
-    if (gBoard[i][j].isMine && !gBoard[pos.i][pos.j].isMarked) { /// in mine clicked
-        gGame.lives--;
-        var audio = document.querySelector("audio");
-        audio.play();
-        gBoard[i][j].isShown = true;
-        var strHTML = `<span>${MINE}</span>`
-        renderCell(pos, strHTML)
-        updateLives()
+    if (cell.isMine && !cell.isMarked) { /// in mine clicked
+        onMineClick(pos, cell);
         return;
     }
-    if (ev.button === 0 && !gBoard[pos.i][pos.j].isMarked) { // left click
-        gGame.shownCount++
-        setMinesNegsCount(gBoard, pos);
-        var currCll = gBoard[pos.i][pos.j];
-        currCll.isShown = true;
-        if (currCll.minesAroundCount === 0) expandShown(i, j);
-        var elSpan = elCell.querySelector('span');
-        elSpan.classList.remove('clicked')
+    if (ev.button === 0 && !cell.isMarked) { // left click
+        onLeftClick(pos, cell, elCell);
     }
-
 }
 
-function cellMarked(location, elCell) {
-    var cell = gBoard[location.i][location.j];
+function onMineClick(pos, cell) {
+    gGame.lives--;
+    var audio = document.querySelector("audio");
+    audio.play();
+    cell.isShown = true;
+    var strHTML = `<span>${MINE}</span>`
+    renderCell(pos, strHTML)
+    updateLives()
+}
+
+function onLeftClick(pos, cell, elCell) {
+    gGame.shownCount++
+    setMinesNegsCount(gBoard, pos);
+    cell.isShown = true;
+    if (cell.minesAroundCount === 0) expandShown(pos.i, pos.j);
+    var elSpan = elCell.querySelector('span');
+    elSpan.classList.remove('clicked')
+}
+
+function markCell(pos, elCell) {
+    var cell = gBoard[pos.i][pos.j];
     if (!cell.isMarked) {
         var elSpan = elCell.querySelector('span');
         elSpan.classList.toggle('clicked');
         cell.isMarked = true;
         gGame.markedCount++;
         var strHTML = `<span>${FLAG}</span>`;
-        renderCell(location, strHTML);
+        renderCell(pos, strHTML);
     } else {
         cell.isMarked = false;
         gGame.markedCount--;
         var strHTML = `<span class="clicked"></span>`;
-        renderCell(location, strHTML);
+        renderCell(pos, strHTML);
     }
-    if (gGame.isMarkManually) removeFlagAura();
+    if (gGame.isMarkManually) removeFlagAura()
     updateScore();
     checkifVictory();
 }
@@ -185,8 +196,8 @@ function gameOver() {
     }
     renderImg('sad');
     clearInterval(gInterval);
-    checkHighScore() /// REMOVE LATER <<<-----------------
     gIsTimerOn = false;
+    checkHighScore();
 }
 
 
