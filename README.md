@@ -1,2 +1,1 @@
-# sprint1-bonus
-Extras
+Minesweeper- vanilla js project. 
